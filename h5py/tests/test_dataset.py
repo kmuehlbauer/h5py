@@ -468,10 +468,12 @@ class TestCreateFillvalue(BaseDataset):
         self.assertAlmostEqual(dset[4], v)
 
     def test_exc(self):
-        """ Bogus fill value raises ValueError """
-        with self.assertRaises(ValueError):
-            dset = self.f.create_dataset('foo', (10,),
-                    dtype=[('a', 'i'), ('b', 'f')], fillvalue=42)
+        """ Bogus fill value converts correctly"""
+        dt = np.dtype([('a', 'i'), ('b', 'f')])
+        v = np.array([42], dtype=dt)[0]
+        dset = self.f.create_dataset('foo', (10,), dtype=[('a', 'i'), ('b', 'f')], fillvalue=42)
+        self.assertEqual(dset[0], v)
+        self.assertEqual(dset[7], v)
 
 
 class TestCreateNamedType(BaseDataset):
